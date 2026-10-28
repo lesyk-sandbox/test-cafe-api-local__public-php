@@ -14,7 +14,7 @@
   },
   "extra": {
     "redocly": {
-      "generatedWith": "@redocly/cli@0.0.0-snapshot.1792596215"
+      "generatedWith": "@redocly/cli@2.72.0"
     }
   }
 }

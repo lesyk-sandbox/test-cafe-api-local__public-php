@@ -377,9 +377,9 @@ final class OrderList
 final class OrderItem
 {
     public function __construct(
-        public string $menuItemId,
         public int $quantity,
-        public Beverage|Dessert|null $menuItem = null,
+        public ?string $menuItemId = null,
+        public Beverage|Dessert|array|null $menuItem = null,
         public ?int $discount = null,
         public ?string $comment = null,
     ) {
@@ -388,8 +388,8 @@ final class OrderItem
     public static function fromArray(array $data): self
     {
         return new self(
-            menuItemId: $data['menuItemId'],
             quantity: $data['quantity'],
+            menuItemId: $data['menuItemId'] ?? null,
             menuItem: isset($data['menuItem']) ? unmarshalMenuItem($data['menuItem']) : null,
             discount: $data['discount'] ?? null,
             comment: $data['comment'] ?? null,
@@ -399,8 +399,10 @@ final class OrderItem
     public function toArray(): array
     {
         $data = [];
-        $data['menuItemId'] = $this->menuItemId;
         $data['quantity'] = $this->quantity;
+        if ($this->menuItemId !== null) {
+            $data['menuItemId'] = $this->menuItemId;
+        }
         if ($this->menuItem !== null) {
             $data['menuItem'] = is_object($this->menuItem) ? $this->menuItem->toArray() : $this->menuItem;
         }
@@ -1368,7 +1370,7 @@ class Client
     public function listMenuItems(?string $after = null, ?string $before = null, ?string $sort = null, ?string $filter = null, ?string $search = null, ?int $limit = null, ?string $type = null, ?array $headers = null): MenuItemList
     {
         $op = self::OPERATIONS['listMenuItems'];
-        [$authHeaders, $query, $cookies] = resolveAuth($op['security'] ?? [], $this->config->auth);
+        [$authHeaders, $query, $cookies] = resolveAuth([], $this->config->auth);
         if ($after !== null) {
             $query['after'] = $after;
         }
@@ -1406,7 +1408,7 @@ class Client
     public function listOrders(?string $filter = null, ?string $sort = null, ?int $limit = null, ?string $after = null, ?string $before = null, ?string $search = null, ?array $headers = null): OrderList
     {
         $op = self::OPERATIONS['listOrders'];
-        [$authHeaders, $query, $cookies] = resolveAuth($op['security'] ?? [], $this->config->auth);
+        [$authHeaders, $query, $cookies] = resolveAuth($op['security'], $this->config->auth);
         if ($filter !== null) {
             $query['filter'] = $filter;
         }
