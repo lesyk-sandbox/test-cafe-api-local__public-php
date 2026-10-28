@@ -1,0 +1,20 @@
+{
+  "name": "local-test/cafe-public",
+  "description": "The PHP client for Redocly Cafe.",
+  "type": "library",
+  "require": {
+    "php": ">=8.1",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "classmap": [
+      "client.php"
+    ]
+  },
+  "extra": {
+    "redocly": {
+      "generatedWith": "@redocly/cli@0.0.0-snapshot.1792596215"
+    }
+  }
+}
